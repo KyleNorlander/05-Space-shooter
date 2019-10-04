@@ -27,7 +27,7 @@ class Bullet(arcade.Sprite):
             velocity: (dx, dy) tuple
             damage: int (or float)
         '''
-        super().__init__("assets/bullet.png", 0.5)
+        super().__init__("PNG/laserPink3.png", 0.5)
         (self.center_x, self.center_y) = position
         (self.dx, self.dy) = velocity
         self.damage = damage
