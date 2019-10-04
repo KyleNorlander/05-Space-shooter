@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 MARGIN = 30
-SCREEN_TITLE = "Bullet exercise"
-
+SCREEN_TITLE = "Intergalactic slam"
 NUM_ENEMIES = 5
 STARTING_LOCATION = (400,100)
 BULLET_DAMAGE = 10
