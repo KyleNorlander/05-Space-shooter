@@ -44,16 +44,16 @@ class Bullet(arcade.Sprite):
     
 class Player(arcade.Sprite):
     def __init__(self):
-        super().__init__("PNG/shipYellow_manned.png", 0.5)
+        super().__init__("assets/narwhal.png", 0.5)
         (self.center_x, self.center_y) = STARTING_LOCATION
 
 class Enemy(arcade.Sprite):
     def __init__(self, position):
         '''
-        initializes an alien enemy
+        initializes a penguin enemy
         Parameter: position: (x,y) tuple
         '''
-        super().__init__("PNG/shipGreen_manned.png", 0.5)
+        super().__init__("assets/penguin.png", 0.5)
         self.hp = ENEMY_HP
         (self.center_x, self.center_y) = position
 
@@ -74,7 +74,6 @@ class Window(arcade.Window):
         self.enemy_list = arcade.SpriteList()
         self.player = Player()
         self.score = 0
-
 
     def setup(self):
         '''
@@ -98,15 +97,26 @@ class Window(arcade.Window):
                 else: 
                     self.score += HIT_SCORE
                     self.bullet_list[0].kill()
-    
+    def draw_game_over(self):
+        """
+        Draw "Game over" across the screen.
+        """
+        output = "Game Over"
+        arcade.draw_text(output, 400, 200, arcade.color.BLACK, 54)
+        #display the score
+        output_2 = "Score: "+str(self.score)
+        arcade.draw_text(output_2, 400, 150, arcade.color.BLACK, 45)
 
    
     def on_draw(self):
-        arcade.start_render()
-        arcade.draw_text(str(self.score), 20, SCREEN_HEIGHT - 40, open_color.white, 16)
-        self.player.draw()
-        self.bullet_list.draw()
-        self.enemy_list.draw()
+        if self.status==GAME_RUNNING:
+            arcade.start_render()
+            arcade.draw_text(str(self.score), 20, SCREEN_HEIGHT - 40, open_color.white, 16)
+            self.player.draw()
+            self.bullet_list.draw()
+            self.enemy_list.draw()
+        if self.status == GAME_END:
+            self.draw_game_over()   
         
 
     def on_mouse_motion(self, x, y, dx, dy):

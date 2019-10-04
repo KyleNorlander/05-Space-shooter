@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 MARGIN = 30
-SCREEN_TITLE = "Bullet exercise"
+SCREEN_TITLE = "Arctic Warfare"
 
 NUM_ENEMIES = 5
 STARTING_LOCATION = (400,100)
@@ -44,16 +44,16 @@ class Bullet(arcade.Sprite):
     
 class Player(arcade.Sprite):
     def __init__(self):
-        super().__init__("PNG/shipYellow_manned.png", 0.5)
+        super().__init__("assets/narwhal.png", 0.5)
         (self.center_x, self.center_y) = STARTING_LOCATION
 
 class Enemy(arcade.Sprite):
     def __init__(self, position):
         '''
-        initializes an alien enemy
+        initializes a penguin enemy
         Parameter: position: (x,y) tuple
         '''
-        super().__init__("PNG/shipGreen_manned.png", 0.5)
+        super().__init__("assets/penguin.png", 0.5)
         self.hp = ENEMY_HP
         (self.center_x, self.center_y) = position
 
@@ -75,7 +75,6 @@ class Window(arcade.Window):
         self.player = Player()
         self.score = 0
 
-
     def setup(self):
         '''
         Set up enemies
@@ -89,25 +88,26 @@ class Window(arcade.Window):
     def update(self, delta_time):
         self.bullet_list.update()
         for e in self.enemy_list:
-            if arcade.check_for_collision_with_list(e, self.bullet_list):
-                e.hp -= 10
-                if e.hp < 0: #If enemy hp is less than 0, increase kill score
-                    self.score += KILL_SCORE
-                    e.kill()
-                    self.bullet_list[0].kill()
-                else: 
-                    self.score += HIT_SCORE
-                    self.bullet_list[0].kill()
-    
+            arcade.check_for_collision_with_list(e, self.bullet_list)
+            e.hp -= 10
+            if e.hp < 0: #If enemy hp is less than 0, increase kill score
+                self.score += KILL_SCORE
+                e.kill()
+                self.bullet_list[0].kill()
+            else: 
+                self.score += HIT_SCORE
+                self.bullet_list[0].kill()
 
-   
+
+            
+           
+
     def on_draw(self):
         arcade.start_render()
         arcade.draw_text(str(self.score), 20, SCREEN_HEIGHT - 40, open_color.white, 16)
         self.player.draw()
         self.bullet_list.draw()
         self.enemy_list.draw()
-        
 
     def on_mouse_motion(self, x, y, dx, dy):
         '''
