@@ -28,7 +28,7 @@ class Bullet(arcade.Sprite):
             velocity: (dx, dy) tuple
             damage: int (or float)
         '''
-        super().__init__("PNG/laserPink3.png", 0.5)
+        super().__init__("assets/Player/PNG/Sprites/Missiles/spaceMissiles_012.png", 0.5)
         (self.center_x, self.center_y) = position
         (self.dx, self.dy) = velocity
         self.damage = damage
@@ -52,7 +52,7 @@ class Enemy_Bullet(arcade.Sprite):
 
 class Player(arcade.Sprite):
     def __init__(self):
-        super().__init__("PNG/shipYellow_manned.png", 0.5)
+        super().__init__("assets/Player/PNG/Sprites/Ships/spaceShips_005.png", 0.5)
         (self.center_x, self.center_y) = STARTING_LOCATION
         self.hp = PLAYER_HP
 
