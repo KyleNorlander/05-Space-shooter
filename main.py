@@ -11,14 +11,15 @@ logger = logging.getLogger(__name__)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 MARGIN = 30
-SCREEN_TITLE = "The Alley of Andromeda"
-NUM_ENEMIES = 5
+SCREEN_TITLE = "Andromeda's Armada"
+NUM_ENEMIES = 10
 STARTING_LOCATION = (400,100)
 BULLET_DAMAGE = 10
 ENEMY_HP = 100
 HIT_SCORE = 10
 KILL_SCORE = 100
 PLAYER_HP = 50
+INITIAL_VELOCITY = 3
 
 class Bullet(arcade.Sprite):
     def __init__(self, position, velocity, damage):
@@ -65,16 +66,6 @@ class Enemy(arcade.Sprite):
         super().__init__("PNG/shipGreen_manned.png", 0.5)
         self.hp = ENEMY_HP
         (self.center_x, self.center_y) = position  #Heres my movement problem
-    def update(self, position):
-        self.dx += random.random() - 0.5
-        self.dy += random.random() - 0.5
-        self.center_x += self.dx
-        self.center_y += self.dy
-
-
-
-        
-
 
 class Window(arcade.Window):
 
@@ -83,6 +74,7 @@ class Window(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
         self.background = arcade.load_texture('assets/spacebackground.png')
+        'sets background'
 
         self.set_mouse_visible(True)
         self.bullet_list = arcade.SpriteList()
@@ -97,11 +89,19 @@ class Window(arcade.Window):
         '''
         Set up enemies
         ''' 
+        enemy = ['enemy']
+
         for i in range(NUM_ENEMIES):
-            x = 120 * (i+1) + 40
-            y = 500
-            enemy = Enemy((x,y))
-            self.enemy_list.append(enemy)            
+
+            x = random.randint(MARGIN,SCREEN_WIDTH-MARGIN)
+            y = random.randint(MARGIN,SCREEN_HEIGHT-MARGIN)
+            self.enemy_sprite = arcade.Sprite("PNG/shipGreen_manned.png".format(enemy=enemy), 0.5)
+            self.enemy_sprite.center_x = x 
+            self.enemy_sprite.center_y = y
+            self.enemy_sprite.mass = 1
+            self.enemy_sprite.hp = 100
+            self.enemy_list.append(self.enemy_sprite)
+
 
     def update(self, delta_time):
         self.bullet_list.update()
@@ -134,7 +134,7 @@ class Window(arcade.Window):
         arcade.start_render()
         self.background.draw(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT)
         arcade.draw_text(str(self.score), 20, SCREEN_HEIGHT - 40, open_color.white, 16)
-        arcade.draw_text("HP: {}".format(self.player.hp), 20, 40, open_color.white, 16)
+        arcade.draw_text("Health: {}".format(self.player.hp), 20, 40, open_color.white, 16)
 
         if (self.player.hp > 0):
             self.player.draw()
@@ -158,15 +158,18 @@ class Window(arcade.Window):
         The player moves left and right with the mouse
         '''
         self.player.center_x = x
+        self.player.center_y = y
+        self.set_mouse_visible(False) 
+
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
-            x = self.player.center_x - 10
+            x = self.player.center_x - 12
             y = self.player.center_y + 15
             bullet = Bullet((x,y),(0,10),BULLET_DAMAGE)
             self.bullet_list.append(bullet)
         if button == arcade.MOUSE_BUTTON_RIGHT:
-            x = self.player.center_x + 10
+            x = self.player.center_x + 12
             y = self.player.center_y + 15
             bullet = Bullet((x,y),(0,10),BULLET_DAMAGE)
             self.bullet_list.append(bullet)
