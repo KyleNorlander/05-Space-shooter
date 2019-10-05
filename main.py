@@ -11,14 +11,14 @@ logger = logging.getLogger(__name__)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 MARGIN = 30
-SCREEN_TITLE = "Intergalactic slam"
+SCREEN_TITLE = "The Alley of Andromeda"
 NUM_ENEMIES = 5
 STARTING_LOCATION = (400,100)
 BULLET_DAMAGE = 10
-ENEMY_HP = 10
+ENEMY_HP = 100
 HIT_SCORE = 10
 KILL_SCORE = 100
-PLAYER_HP = 100
+PLAYER_HP = 50
 
 class Bullet(arcade.Sprite):
     def __init__(self, position, velocity, damage):
@@ -42,7 +42,7 @@ class Bullet(arcade.Sprite):
 
 class Enemy_Bullet(arcade.Sprite):
     def __init__(self, position, velocity, damage):
-        super().__init__("PNG/laserGreen1.png", 0.5)
+        super().__init__("PNG/laserGreen3.png", 0.5)
         (self.center_x, self.center_y) = position
         (self.dx, self.dy) = velocity
         self.damage = damage
@@ -64,7 +64,13 @@ class Enemy(arcade.Sprite):
         '''
         super().__init__("PNG/shipGreen_manned.png", 0.5)
         self.hp = ENEMY_HP
-        (self.center_x, self.center_y) = position
+        (self.center_x, self.center_y) = position  #Heres my movement problem
+    def update(self, position):
+        self.dx += random.random() - 0.5
+        self.dy += random.random() - 0.5
+        self.center_x += self.dx
+        self.center_y += self.dy
+
 
 
         
@@ -76,9 +82,9 @@ class Window(arcade.Window):
         super().__init__(width, height, title)
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
+        self.background = arcade.load_texture('assets/spacebackground.png')
 
         self.set_mouse_visible(True)
-        arcade.set_background_color(open_color.black)
         self.bullet_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.enemy_bullet_list = arcade.SpriteList()
@@ -87,11 +93,10 @@ class Window(arcade.Window):
         self.win = False
         self.lose = False
 
-
     def setup(self):
         '''
         Set up enemies
-        '''
+        ''' 
         for i in range(NUM_ENEMIES):
             x = 120 * (i+1) + 40
             y = 500
@@ -127,6 +132,7 @@ class Window(arcade.Window):
    
     def on_draw(self):
         arcade.start_render()
+        self.background.draw(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT)
         arcade.draw_text(str(self.score), 20, SCREEN_HEIGHT - 40, open_color.white, 16)
         arcade.draw_text("HP: {}".format(self.player.hp), 20, 40, open_color.white, 16)
 
@@ -142,10 +148,10 @@ class Window(arcade.Window):
             self.draw_game_won()
 
     def draw_game_loss(self):
-        arcade.draw_text(str("LOSER!"), SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 - 10, open_color.white, 30)
+        arcade.draw_text(str("GAME OVER"), SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 - 10, open_color.white, 30)
 
     def draw_game_won(self):
-        arcade.draw_text(str("WINNER!"), SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 - 10, open_color.white, 30)
+        arcade.draw_text(str("YOU WON!"), SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 - 10, open_color.white, 30)
      
     def on_mouse_motion(self, x, y, dx, dy):
         '''
@@ -155,7 +161,12 @@ class Window(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
-            x = self.player.center_x
+            x = self.player.center_x - 10
+            y = self.player.center_y + 15
+            bullet = Bullet((x,y),(0,10),BULLET_DAMAGE)
+            self.bullet_list.append(bullet)
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            x = self.player.center_x + 10
             y = self.player.center_y + 15
             bullet = Bullet((x,y),(0,10),BULLET_DAMAGE)
             self.bullet_list.append(bullet)
