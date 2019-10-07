@@ -66,6 +66,21 @@ class Enemy(arcade.Sprite):
         super().__init__("PNG/shipGreen_manned.png", 0.5)
         self.hp = ENEMY_HP
         (self.center_x, self.center_y) = position  #Heres my movement problem
+        self.dx = random.randrange(-2,2)
+        self.dy = random.randrange(-2,2)
+
+    def update(self):
+        print("updating")
+        self.center_x += self.dx
+        self.center_y += self.dy
+        if self.center_x <= 0:
+            self.dx = abs(self.dx)
+        if self.center_y <= 0:
+            self.dy = abs(self.dy)
+        if self.center_x >= SCREEN_WIDTH:
+            self.dx = abs(self.dx)*-1
+        if self.center_y >= SCREEN_HEIGHT:
+            self.dy = abs(self.dy)*-1
 
 class Window(arcade.Window):
 
@@ -75,7 +90,6 @@ class Window(arcade.Window):
         os.chdir(file_path)
         self.background = arcade.load_texture('assets/spacebackground.png')
         'sets background'
-
         self.set_mouse_visible(True)
         self.bullet_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
@@ -95,9 +109,7 @@ class Window(arcade.Window):
 
             x = random.randint(MARGIN,SCREEN_WIDTH-MARGIN)
             y = random.randint(MARGIN,SCREEN_HEIGHT-MARGIN)
-            self.enemy_sprite = arcade.Sprite("PNG/shipGreen_manned.png".format(enemy=enemy), 0.5)
-            self.enemy_sprite.center_x = x 
-            self.enemy_sprite.center_y = y
+            self.enemy_sprite = Enemy((x,y))
             self.enemy_sprite.mass = 1
             self.enemy_sprite.hp = 100
             self.enemy_list.append(self.enemy_sprite)
@@ -106,6 +118,7 @@ class Window(arcade.Window):
     def update(self, delta_time):
         self.bullet_list.update()
         self.enemy_bullet_list.update()
+        self.enemy_list.update()
         if (not (self.win or self.lose)): 
             for e in self.enemy_list:
                 for b in self.bullet_list:
