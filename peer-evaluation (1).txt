@@ -1,0 +1,38 @@
+Name:Nolan McIntire
+Date:10/17/1029
+Project: Space Shooter
+Peer's repository: Kyle Norlander
+
+
+
+What is something you learned by reviewing your peer's project?
+
+ You can add an image and text to the background of the window(not surprsied just didn't know how)
+
+What is something you saw in your peer's project that you would like to apply to your own programming projects?
+
+ changing the background of the window and maybe use movement on enemies
+
+What suggestions would you have for your peer to improve his/her code?
+
+ would reduce enemy amount or enemy hp,maybe also add a way for the window to close other than exiting
+
+What could have been clearer or better commented?
+
+ it was described well
+
+Was there anything in the code that was confusing to you? If so, what?
+
+ there was not
+
+Does the repository contain an appropriate LICENSE?
+It does.
+ 
+
+What is something he/she could add to the README.md to make it more descriptive?
+
+ Nothing,it has a lot of useful information in it
+
+Pay a compliment to your peer based on the quality of his/her code.
+The game runs well and looks nice
+
